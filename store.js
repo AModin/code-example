@@ -155,10 +155,6 @@ class Tinder {
       this.closeModalPartners();
     }
 
-    @action set = (property, value) => {
-      this[property] = value;
-    }
-
     @action filterByIndustryId = (id) => {
       id === this.industryId ? this.industryId = null : this.industryId = id;
     }
@@ -187,12 +183,12 @@ class Tinder {
           url: '/api/v1/client/partners/',
           data,
         });
-        this.set('partnersRequestFailed', false);
+        this.partnersRequestFailed = false;
       } catch (e) {
-        this.set('partnersRequestFailed', true);
+        this.partnersRequestFailed = true;
         console.log(e);
       } finally {
-        this.set('partnersRequest', false);
+        this.partnersRequest = false;
       }
     }
 
@@ -211,11 +207,11 @@ class Tinder {
         const data = await axiosAuthorizedRequest({
           url: id ? `/api/v1/client/businesses/?industry=${id}` : '/api/v1/client/businesses/',
         });
-        runInAction(() => { this.industryItems = data; });
+        this.industryItems = data;
       } catch (e) {
         console.log(e);
       } finally {
-        runInAction(() => { this.industryLoading = false; });
+        this.industryLoading = false;
       }
     }
 
@@ -246,7 +242,7 @@ class Tinder {
       } catch (e) {
         console.error(e);
       } finally {
-        this.set('searchIsFetching', false);
+        this.searchIsFetching = false;
       }
     }
 
@@ -382,13 +378,13 @@ class Tinder {
           this.myBusiness.push(...response);
         });
       } else if (response.length && !hasSomeActions) {
-        this.set('introStep', 2);
+        this.introStep = 2;
         this.myBusiness.push(...response);
       } else {
-        this.set('introStep', 0);
+        this.introStep = 0;
       }
 
-      this.set('isInitialDataLoading', false);
+      this.isInitialDataLoading = false;
     }
 
     @action getAllMyBusinessesList = async () => {
@@ -576,7 +572,7 @@ class Tinder {
       } catch (e) {
         console.log(e);
       } finally {
-        runInAction(() => { this.itemLoading = false; });
+        this.itemLoading = false;
       }
     }
 
@@ -586,11 +582,11 @@ class Tinder {
       try {
         this.itemLoading = true;
         const data = await axiosAuthorizedRequest({ url: `/api/v1/client/businesses/${id}/` });
-        runInAction(() => { this.item = data; });
+        this.item = data;
       } catch (e) {
         console.log(e);
       } finally {
-        runInAction(() => { this.itemLoading = false; });
+        this.itemLoading = false;
       }
     }
 
